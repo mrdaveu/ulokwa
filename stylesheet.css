@@ -11,9 +11,34 @@ html {
    height: 100%;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 660px) {
    html {
       font-size: 15px!important;
+   }
+
+   #articleView {
+      top: 10vh!important;
+      left: 0;
+      right: 0;
+      margin: 0 1em!important;
+      width: auto!important;
+      overflow-x: hidden;
+   }
+
+   .section-title.active {
+      margin-right: 9px!important;
+   }
+
+   .section-title.active::after {
+      right: -9px!important;
+      width: 9px!important;
+      height: 8px!important;
+      background-image: url('data:image/svg+xml,<svg width="9" height="8" viewBox="0 0 9 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.46 7.08L4.53 6.15L5.67 5.025L6.375 4.425L6.36 4.365L5.025 4.455H0.42L0.42 3.075H5.025L6.36 3.165L6.375 3.105L5.67 2.505L4.53 1.395L5.46 0.465L8.775 3.78L5.46 7.08Z" fill="%23273800"/></svg>')!important;
+   }
+
+   img {
+      max-width: 100%!important;
+      height: auto!important;
    }
 }
 
@@ -124,13 +149,19 @@ img {
 #articleView {
    display: none;
    position: absolute;
-   top: 20vh;
+   top: 15vh;
    margin-left: 7rem;
-   width: 30rem;
+   padding-left: 0.15rem;
+   width: min(30rem, calc(100vw - 7rem - 2em));
+   overflow-wrap: break-word;
+   word-wrap: break-word;
+   hyphens: auto;
+   -webkit-hyphens: auto;
+   -ms-hyphens: auto;
 }
 
 p {
-   font-size: 150%;
+   font-size: 135%;
 }
 
 #articleView.visible {
