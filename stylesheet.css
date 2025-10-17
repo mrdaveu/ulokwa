@@ -147,9 +147,7 @@ p {
 
 /* Comment Section Styles */
 .comments-section {
-   margin-top: 3rem;
-   padding-top: 2rem;
-   border-top: 1px solid rgba(36, 56, 0, 0.2);
+   margin: 3em 0 1em;
 }
 
 .empty-message {
@@ -221,7 +219,17 @@ p {
    gap: 0.8rem;
 }
 
-.comment-input,
+.comment-input {
+   font-family: "Helvetica Neue", sans-serif;
+   font-size: 90%;
+   padding: 0.6rem;
+   border: 1px solid rgba(36, 56, 0, 0.3);
+   border-radius: 4px;
+   background: rgba(255, 255, 255, 0.8);
+   color: rgb(36, 56, 0);
+   width: 33%;
+}
+
 .comment-textarea {
    font-family: "Helvetica Neue", sans-serif;
    font-size: 90%;
@@ -256,7 +264,6 @@ p {
    border-radius: 4px;
    cursor: pointer;
    width: fit-content;
-   transition: background 0.2s;
 }
 
 .comment-submit:hover:not(:disabled) {
