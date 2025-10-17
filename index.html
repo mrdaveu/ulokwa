@@ -80,29 +80,14 @@ document.addEventListener('DOMContentLoaded', function() {
    // Function to display content
    async function displayContent(url, html) {
        currentPageUrl = url;
+       articleContent.innerHTML = html;
+       articleView.classList.add('visible');
 
-       // Only add comments section for questions
-       if (url.includes('/questions/')) {
-           articleContent.innerHTML = html + `
-               <div class="comments-section" id="commentsSection">
-                   <div class="comments-list" id="commentsList"></div>
-                   <form class="comment-form" id="commentForm">
-                       <input type="text" id="authorName" placeholder="anonymous" class="comment-input">
-                       <textarea id="commentText" placeholder="i think its obviously cuz..." class="comment-textarea" required></textarea>
-                       <button type="submit" class="comment-submit">Add comment</button>
-                   </form>
-               </div>
-           `;
-
-           articleView.classList.add('visible');
+       // If comments section exists (for empty questions), load comments
+       const commentsList = document.getElementById('commentsList');
+       if (commentsList) {
            await loadComments(url);
-
-           const form = document.getElementById('commentForm');
-           form.addEventListener('submit', handleCommentSubmit);
-       } else {
-           // No comments for other sections
-           articleContent.innerHTML = html;
-           articleView.classList.add('visible');
+           document.getElementById('commentForm').addEventListener('submit', handleCommentSubmit);
        }
    }
 
@@ -197,9 +182,30 @@ document.addEventListener('DOMContentLoaded', function() {
        return date.toLocaleDateString();
    }
 
+   // About button handler
+   const aboutBtn = document.querySelector('.about');
+   aboutBtn.addEventListener('click', function() {
+       const isActive = this.classList.contains('active');
+
+       if (isActive) {
+           // Close about
+           this.classList.remove('active');
+           sectionTitles.forEach(t => t.style.display = '');
+       } else {
+           // Open about - hide other section titles
+           this.classList.add('active');
+           sectionTitles.forEach(t => t.style.display = 'none');
+           document.querySelectorAll('.section-items').forEach(item => item.classList.remove('active'));
+       }
+   });
+
    sectionTitles.forEach(title => {
        title.addEventListener('click', function() {
            const section = this.getAttribute('data-section');
+
+           // Hide about if showing
+           aboutBtn.classList.remove('active');
+           sectionTitles.forEach(t => t.style.display = '');
 
            // Remove active class from all section titles
            sectionTitles.forEach(t => t.classList.remove('active'));

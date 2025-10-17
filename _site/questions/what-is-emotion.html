@@ -1,10 +1,111 @@
 <!DOCTYPE html>
 <html>
+
 <body>
     <div class="article-body">
         
-            <p class="empty-message">The answer is not yet known to this part of the internet.</p>
+        <p class="empty-message">this cluster of consciousness doesn't know yet... but maybe u do?</p>
+        <div class="comments-section" id="commentsSection">
+            <div class="comments-list" id="commentsList"></div>
+            <form class="comment-form" id="commentForm">
+                <input type="text" id="authorName" placeholder="anonymous" class="comment-input">
+                <textarea id="commentText" placeholder="i think its obviously cuz..." class="comment-textarea" required></textarea>
+                <button type="submit" class="comment-submit">Add comment</button>
+            </form>
+        </div>
         
     </div>
 </body>
+<script>
+    async function loadComments(pageUrl) {
+        try {
+            const response = await fetch(`/.netlify/functions/get-comments?url=${encodeURIComponent(pageUrl)}`);
+            const data = await response.json();
+
+            const commentsList = document.getElementById('commentsList');
+            if (data.comments && data.comments.length > 0) {
+                commentsList.innerHTML = '<h3 class="comments-header">Comments</h3>' +
+                    data.comments.map(comment => `
+                           <div class="comment">
+                               <div class="comment-header">
+                                   <span class="comment-author">${escapeHtml(comment.author_name || 'Anonymous')}</span>
+                                   <span class="comment-date">${formatDate(comment.created_at)}</span>
+                               </div>
+                               <div class="comment-body">${escapeHtml(comment.comment)}</div>
+                           </div>
+                       `).join('');
+            }
+        } catch (error) {
+            console.error('Error loading comments:', error);
+        }
+    }
+
+    // Function to handle comment submission
+    async function handleCommentSubmit(e) {
+        e.preventDefault();
+
+        const authorName = document.getElementById('authorName').value.trim();
+        const commentText = document.getElementById('commentText').value.trim();
+
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        try {
+            const response = await fetch('/.netlify/functions/post-comment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pageUrl: currentPageUrl,
+                    comment: commentText,
+                    authorName: authorName || 'Anonymous'
+                })
+            });
+
+            if (response.ok) {
+                // Clear form
+                document.getElementById('authorName').value = '';
+                document.getElementById('commentText').value = '';
+
+                // Reload comments
+                await loadComments(currentPageUrl);
+
+                submitBtn.textContent = 'Submitted!';
+                setTimeout(() => {
+                    submitBtn.textContent = 'Add comment';
+                    submitBtn.disabled = false;
+                }, 2000);
+            } else {
+                throw new Error('Failed to submit comment');
+            }
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+            submitBtn.textContent = 'Error - Try again';
+            setTimeout(() => {
+                submitBtn.textContent = 'Add comment';
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+    }
+
+    // Utility functions
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diff = now - date;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        if (days === 0) return 'Today';
+        if (days === 1) return 'Yesterday';
+        if (days < 7) return `${days} days ago`;
+        return date.toLocaleDateString();
+    }
+</script>
+
 </html>

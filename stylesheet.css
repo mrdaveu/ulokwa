@@ -48,6 +48,18 @@ img {
    margin-top: auto;
 }
 
+.about {
+   white-space: nowrap;
+}
+
+.about.active {
+   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #EED300 0.1em, #EED300 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
+}
+
+.about.active::after {
+   content: " all the things we know";
+}
+
 .column-right {
    width: 30rem;
    display: flex;
