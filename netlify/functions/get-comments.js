@@ -26,20 +26,19 @@ exports.handler = async (event, context) => {
     };
   }
 
-  // Extract connection details from DATABASE_URL
+  // Parse connection string to get REST API endpoint
   const dbUrl = new URL(DATABASE_URL);
-  const [user, password] = dbUrl.username && dbUrl.password
-    ? [dbUrl.username, dbUrl.password]
-    : ['neondb_owner', ''];
+  const hostname = dbUrl.hostname.replace('-pooler', '');
 
-  const restApiUrl = `https://${dbUrl.hostname.replace('-pooler', '')}/sql`;
+  // Neon REST API endpoint format
+  const restApiUrl = `https://${hostname}/sql`;
 
   try {
     const response = await fetch(restApiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${password}`
+        'neon-connection-string': DATABASE_URL
       },
       body: JSON.stringify({
         query: 'SELECT id, comment, author_name, created_at FROM comments WHERE page_url = $1 ORDER BY created_at DESC',
