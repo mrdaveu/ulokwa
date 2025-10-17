@@ -1,0 +1,5 @@
+{
+   "layout": "layout.html",
+   "tags": "pictures",
+   "permalink": "/pictures/{{ title | slug }}.html"
+}

@@ -1,0 +1,5 @@
+{
+   "layout": "layout.html",
+   "tags": "glossary",
+   "permalink": "/glossary/{{ title | slug }}.html"
+}

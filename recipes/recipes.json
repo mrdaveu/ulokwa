@@ -1,0 +1,5 @@
+{
+   "layout": "layout.html",
+   "tags": "recipes",
+   "permalink": "/recipes/{{ title | slug }}.html"
+}
