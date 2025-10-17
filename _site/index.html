@@ -123,11 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
            const commentsList = document.getElementById('commentsList');
            if (data.comments && data.comments.length > 0) {
-               commentsList.innerHTML = '<h3 class="comments-header">Comments</h3>' +
+               commentsList.innerHTML = '<h3 class="comments-header">noosphere says...</h3>' +
                    data.comments.map(comment => `
                        <div class="comment">
                            <div class="comment-header">
-                               <span class="comment-author">${escapeHtml(comment.author_name || 'Anonymous')}</span>
+                               <span class="comment-author">${escapeHtml(comment.author_name || 'anonymous')}</span>
                                <span class="comment-date">${formatDate(comment.created_at)}</span>
                            </div>
                            <div class="comment-body">${escapeHtml(comment.comment)}</div>
