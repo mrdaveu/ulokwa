@@ -30,7 +30,7 @@
                     data.comments.map(comment => `
                            <div class="comment">
                                <div class="comment-header">
-                                   <span class="comment-author">${escapeHtml(comment.author_name || 'Anonymous')}</span>
+                                   <span class="comment-author">${escapeHtml(comment.author_name || 'anonymous')}</span>
                                    <span class="comment-date">${formatDate(comment.created_at)}</span>
                                </div>
                                <div class="comment-body">${escapeHtml(comment.comment)}</div>
