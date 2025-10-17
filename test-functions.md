@@ -68,5 +68,11 @@ Then test locally at:
 
 ### 500 errors
 - Check Netlify Functions logs
-- Verify `NETLIFY_DATABASE_URL_UNPOOLED` is set
-- Verify database schema exists
+- Verify `NEON_REST_API_URL` and `NEON_API_KEY` are set in Netlify
+- Verify database schema exists (run `schema.sql`)
+- Check if API key has correct permissions
+
+### "Server configuration error"
+- Missing environment variables
+- Go to Netlify Dashboard → Site Settings → Environment Variables
+- Add `NEON_REST_API_URL` and `NEON_API_KEY`

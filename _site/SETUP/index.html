@@ -24,20 +24,19 @@
 <p>Connect your repo to Netlify</p>
 </li>
 <li>
-<p><strong>Add Neon Integration</strong> (Recommended):</p>
+<p><strong>Add Environment Variables</strong> in Netlify Dashboard → Site Settings → Environment Variables:</p>
+<p><strong>Required:</strong></p>
 <ul>
-<li>Go to Netlify Dashboard → Integrations → Search &quot;Neon&quot;</li>
-<li>Connect Neon - this automatically creates:
+<li><code>NEON_REST_API_URL</code>: Your Neon REST API endpoint
 <ul>
-<li><code>NETLIFY_DATABASE_URL</code> (pooled connection)</li>
-<li><code>NETLIFY_DATABASE_URL_UNPOOLED</code> (for serverless functions)</li>
+<li>Example: <code>https://ep-frosty-fire-ae0rgj8a.apirest.c-2.us-east-2.aws.neon.tech/neondb/rest/v1</code></li>
 </ul>
 </li>
-</ul>
-<p>OR manually add environment variable:</p>
+<li><code>NEON_API_KEY</code>: Your Neon API key
 <ul>
-<li>Variable name: <code>DATABASE_URL</code></li>
-<li>Value: Your Neon connection string</li>
+<li>Get from Neon Console → Account Settings → API Keys → Create new key</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>
@@ -53,9 +52,9 @@
 netlify dev
 </code></pre>
 <p>Add <code>.env</code> file:</p>
-<pre><code>NETLIFY_DATABASE_URL_UNPOOLED=your_neon_connection_string_here
+<pre><code>NEON_REST_API_URL=https://your-neon-project.apirest.aws.neon.tech/neondb/rest/v1
+NEON_API_KEY=your_api_key_here
 </code></pre>
-<p><strong>Note:</strong> Use the unpooled connection string from Neon for serverless functions.</p>
 <h3>5. Build and Deploy</h3>
 <pre><code class="language-bash">npm run build
 netlify deploy --prod
@@ -139,8 +138,8 @@ Content-Type: application/json
 <li><strong>Check browser console</strong> for errors</li>
 <li><strong>Verify environment variables</strong> in Netlify:
 <ul>
-<li>Should have <code>NETLIFY_DATABASE_URL_UNPOOLED</code> (from Neon integration)</li>
-<li>OR <code>DATABASE_URL</code> (if set manually)</li>
+<li><code>NEON_REST_API_URL</code> should be set to your REST API endpoint</li>
+<li><code>NEON_API_KEY</code> should be set to your Neon API key</li>
 </ul>
 </li>
 <li><strong>Check Netlify Functions logs</strong>:
@@ -157,18 +156,23 @@ Content-Type: application/json
 <li><strong>Check Netlify Functions logs</strong> for database connection errors</li>
 <li><strong>Verify schema exists</strong>: Run <code>schema.sql</code> in Neon SQL Editor</li>
 </ul>
-<h3>Database connection errors?</h3>
-<ul>
-<li>Use <strong>unpooled connection string</strong> for serverless functions</li>
-<li>Neon integration provides <code>NETLIFY_DATABASE_URL_UNPOOLED</code> automatically</li>
-<li>If manual setup, get unpooled connection from Neon dashboard</li>
-</ul>
+<h3>Getting Neon API Key</h3>
+<ol>
+<li>Go to <a href="https://console.neon.tech">Neon Console</a></li>
+<li>Click your profile → Account Settings</li>
+<li>Go to API Keys section</li>
+<li>Click &quot;Create new API key&quot;</li>
+<li>Copy the key and add to Netlify environment variables</li>
+</ol>
 <h3>Local development not working?</h3>
 <pre><code class="language-bash"># Install Netlify CLI
 npm install -g netlify-cli
 
-# Create .env file
-echo &quot;NETLIFY_DATABASE_URL_UNPOOLED=your_connection_string&quot; &gt; .env
+# Create .env file with your credentials
+cat &gt; .env &lt;&lt; EOF
+NEON_REST_API_URL=https://your-project.apirest.aws.neon.tech/neondb/rest/v1
+NEON_API_KEY=your_api_key_here
+EOF
 
 # Run local dev server
 netlify dev

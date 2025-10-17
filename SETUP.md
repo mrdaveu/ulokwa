@@ -21,15 +21,14 @@ This site now includes a dynamic comment system that allows visitors to contribu
 
 ### 2. Configure Netlify
 1. Connect your repo to Netlify
-2. **Add Neon Integration** (Recommended):
-   - Go to Netlify Dashboard → Integrations → Search "Neon"
-   - Connect Neon - this automatically creates:
-     - `NETLIFY_DATABASE_URL` (pooled connection)
-     - `NETLIFY_DATABASE_URL_UNPOOLED` (for serverless functions)
+2. **Add Environment Variables** in Netlify Dashboard → Site Settings → Environment Variables:
 
-   OR manually add environment variable:
-   - Variable name: `DATABASE_URL`
-   - Value: Your Neon connection string
+   **Required:**
+   - `NEON_REST_API_URL`: Your Neon REST API endpoint
+     - Example: `https://ep-frosty-fire-ae0rgj8a.apirest.c-2.us-east-2.aws.neon.tech/neondb/rest/v1`
+   - `NEON_API_KEY`: Your Neon API key
+     - Get from Neon Console → Account Settings → API Keys → Create new key
+
 3. Deploy site
 
 ### 3. Install Dependencies
@@ -46,10 +45,9 @@ netlify dev
 
 Add `.env` file:
 ```
-NETLIFY_DATABASE_URL_UNPOOLED=your_neon_connection_string_here
+NEON_REST_API_URL=https://your-neon-project.apirest.aws.neon.tech/neondb/rest/v1
+NEON_API_KEY=your_api_key_here
 ```
-
-**Note:** Use the unpooled connection string from Neon for serverless functions.
 
 ### 5. Build and Deploy
 ```bash
@@ -145,8 +143,8 @@ Edit `stylesheet.css` in the "Comment Section Styles" block
 ### Comments not loading?
 - **Check browser console** for errors
 - **Verify environment variables** in Netlify:
-  - Should have `NETLIFY_DATABASE_URL_UNPOOLED` (from Neon integration)
-  - OR `DATABASE_URL` (if set manually)
+  - `NEON_REST_API_URL` should be set to your REST API endpoint
+  - `NEON_API_KEY` should be set to your Neon API key
 - **Check Netlify Functions logs**:
   - Netlify Dashboard → Functions → Click function → View logs
 - **Test function directly**: Visit `https://yoursite.netlify.app/.netlify/functions/get-comments?url=/test.html`
@@ -157,18 +155,23 @@ Edit `stylesheet.css` in the "Comment Section Styles" block
 - **Check Netlify Functions logs** for database connection errors
 - **Verify schema exists**: Run `schema.sql` in Neon SQL Editor
 
-### Database connection errors?
-- Use **unpooled connection string** for serverless functions
-- Neon integration provides `NETLIFY_DATABASE_URL_UNPOOLED` automatically
-- If manual setup, get unpooled connection from Neon dashboard
+### Getting Neon API Key
+1. Go to [Neon Console](https://console.neon.tech)
+2. Click your profile → Account Settings
+3. Go to API Keys section
+4. Click "Create new API key"
+5. Copy the key and add to Netlify environment variables
 
 ### Local development not working?
 ```bash
 # Install Netlify CLI
 npm install -g netlify-cli
 
-# Create .env file
-echo "NETLIFY_DATABASE_URL_UNPOOLED=your_connection_string" > .env
+# Create .env file with your credentials
+cat > .env << EOF
+NEON_REST_API_URL=https://your-project.apirest.aws.neon.tech/neondb/rest/v1
+NEON_API_KEY=your_api_key_here
+EOF
 
 # Run local dev server
 netlify dev
