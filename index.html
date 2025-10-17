@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
                    <form class="comment-form" id="commentForm">
                        <input type="text" id="authorName" placeholder="Your name (optional)" class="comment-input">
                        <textarea id="commentText" placeholder="Share your thoughts..." class="comment-textarea" required></textarea>
-                       <input type="text" id="honeypot" style="display: none;">
                        <button type="submit" class="comment-submit">Submit</button>
                    </form>
                </div>
@@ -117,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
                    <form class="comment-form" id="commentForm">
                        <input type="text" id="authorName" placeholder="Your name (optional)" class="comment-input">
                        <textarea id="commentText" placeholder="Share your thoughts..." class="comment-textarea" required></textarea>
-                       <input type="text" id="honeypot" style="display: none;">
                        <button type="submit" class="comment-submit">Add comment</button>
                    </form>
                </div>
@@ -167,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
        const authorName = document.getElementById('authorName').value.trim();
        const commentText = document.getElementById('commentText').value.trim();
-       const honeypot = document.getElementById('honeypot').value;
 
        const submitBtn = e.target.querySelector('button[type="submit"]');
        submitBtn.disabled = true;
@@ -180,8 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
                body: JSON.stringify({
                    pageUrl: currentPageUrl,
                    comment: commentText,
-                   authorName: authorName || 'Anonymous',
-                   honeypot: honeypot
+                   authorName: authorName || 'Anonymous'
                })
            });
 
