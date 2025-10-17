@@ -20,14 +20,29 @@
 </ol>
 <h3>2. Configure Netlify</h3>
 <ol>
-<li>Connect your repo to Netlify</li>
-<li>Add Neon integration OR manually add environment variable:
+<li>
+<p>Connect your repo to Netlify</p>
+</li>
+<li>
+<p><strong>Add Neon Integration</strong> (Recommended):</p>
+<ul>
+<li>Go to Netlify Dashboard → Integrations → Search &quot;Neon&quot;</li>
+<li>Connect Neon - this automatically creates:
+<ul>
+<li><code>NETLIFY_DATABASE_URL</code> (pooled connection)</li>
+<li><code>NETLIFY_DATABASE_URL_UNPOOLED</code> (for serverless functions)</li>
+</ul>
+</li>
+</ul>
+<p>OR manually add environment variable:</p>
 <ul>
 <li>Variable name: <code>DATABASE_URL</code></li>
 <li>Value: Your Neon connection string</li>
 </ul>
 </li>
-<li>Deploy site</li>
+<li>
+<p>Deploy site</p>
+</li>
 </ol>
 <h3>3. Install Dependencies</h3>
 <pre><code class="language-bash">npm install
@@ -38,8 +53,9 @@
 netlify dev
 </code></pre>
 <p>Add <code>.env</code> file:</p>
-<pre><code>DATABASE_URL=your_neon_connection_string_here
+<pre><code>NETLIFY_DATABASE_URL_UNPOOLED=your_neon_connection_string_here
 </code></pre>
+<p><strong>Note:</strong> Use the unpooled connection string from Neon for serverless functions.</p>
 <h3>5. Build and Deploy</h3>
 <pre><code class="language-bash">npm run build
 netlify deploy --prod
@@ -112,18 +128,51 @@ Content-Type: application/json
 <li>Can add rate limiting in Netlify Functions if needed</li>
 </ul>
 <h2>Troubleshooting</h2>
+<h3>Functions returning 404?</h3>
+<ul>
+<li>Verify <code>netlify.toml</code> has correct <code>[functions]</code> section</li>
+<li>Check that <code>netlify/functions/</code> directory exists</li>
+<li>Redeploy after adding functions</li>
+</ul>
 <h3>Comments not loading?</h3>
 <ul>
-<li>Check browser console for errors</li>
-<li>Verify <code>DATABASE_URL</code> is set in Netlify environment variables</li>
-<li>Check Netlify Functions logs</li>
+<li><strong>Check browser console</strong> for errors</li>
+<li><strong>Verify environment variables</strong> in Netlify:
+<ul>
+<li>Should have <code>NETLIFY_DATABASE_URL_UNPOOLED</code> (from Neon integration)</li>
+<li>OR <code>DATABASE_URL</code> (if set manually)</li>
+</ul>
+</li>
+<li><strong>Check Netlify Functions logs</strong>:
+<ul>
+<li>Netlify Dashboard → Functions → Click function → View logs</li>
+</ul>
+</li>
+<li><strong>Test function directly</strong>: Visit <code>https://yoursite.netlify.app/.netlify/functions/get-comments?url=/test.html</code></li>
 </ul>
 <h3>Can't submit comments?</h3>
 <ul>
-<li>Check network tab for 500 errors</li>
-<li>Verify database connection string</li>
-<li>Check Netlify Functions logs for errors</li>
+<li><strong>Check network tab</strong> for 500 errors</li>
+<li><strong>Verify database connection string</strong> has correct format</li>
+<li><strong>Check Netlify Functions logs</strong> for database connection errors</li>
+<li><strong>Verify schema exists</strong>: Run <code>schema.sql</code> in Neon SQL Editor</li>
 </ul>
+<h3>Database connection errors?</h3>
+<ul>
+<li>Use <strong>unpooled connection string</strong> for serverless functions</li>
+<li>Neon integration provides <code>NETLIFY_DATABASE_URL_UNPOOLED</code> automatically</li>
+<li>If manual setup, get unpooled connection from Neon dashboard</li>
+</ul>
+<h3>Local development not working?</h3>
+<pre><code class="language-bash"># Install Netlify CLI
+npm install -g netlify-cli
+
+# Create .env file
+echo &quot;NETLIFY_DATABASE_URL_UNPOOLED=your_connection_string&quot; &gt; .env
+
+# Run local dev server
+netlify dev
+</code></pre>
 <h2>Future Enhancements</h2>
 <ul>
 <li>[ ] Add comment moderation</li>

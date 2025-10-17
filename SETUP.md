@@ -21,7 +21,13 @@ This site now includes a dynamic comment system that allows visitors to contribu
 
 ### 2. Configure Netlify
 1. Connect your repo to Netlify
-2. Add Neon integration OR manually add environment variable:
+2. **Add Neon Integration** (Recommended):
+   - Go to Netlify Dashboard → Integrations → Search "Neon"
+   - Connect Neon - this automatically creates:
+     - `NETLIFY_DATABASE_URL` (pooled connection)
+     - `NETLIFY_DATABASE_URL_UNPOOLED` (for serverless functions)
+
+   OR manually add environment variable:
    - Variable name: `DATABASE_URL`
    - Value: Your Neon connection string
 3. Deploy site
@@ -40,8 +46,10 @@ netlify dev
 
 Add `.env` file:
 ```
-DATABASE_URL=your_neon_connection_string_here
+NETLIFY_DATABASE_URL_UNPOOLED=your_neon_connection_string_here
 ```
+
+**Note:** Use the unpooled connection string from Neon for serverless functions.
 
 ### 5. Build and Deploy
 ```bash
@@ -129,15 +137,42 @@ Edit `stylesheet.css` in the "Comment Section Styles" block
 
 ## Troubleshooting
 
+### Functions returning 404?
+- Verify `netlify.toml` has correct `[functions]` section
+- Check that `netlify/functions/` directory exists
+- Redeploy after adding functions
+
 ### Comments not loading?
-- Check browser console for errors
-- Verify `DATABASE_URL` is set in Netlify environment variables
-- Check Netlify Functions logs
+- **Check browser console** for errors
+- **Verify environment variables** in Netlify:
+  - Should have `NETLIFY_DATABASE_URL_UNPOOLED` (from Neon integration)
+  - OR `DATABASE_URL` (if set manually)
+- **Check Netlify Functions logs**:
+  - Netlify Dashboard → Functions → Click function → View logs
+- **Test function directly**: Visit `https://yoursite.netlify.app/.netlify/functions/get-comments?url=/test.html`
 
 ### Can't submit comments?
-- Check network tab for 500 errors
-- Verify database connection string
-- Check Netlify Functions logs for errors
+- **Check network tab** for 500 errors
+- **Verify database connection string** has correct format
+- **Check Netlify Functions logs** for database connection errors
+- **Verify schema exists**: Run `schema.sql` in Neon SQL Editor
+
+### Database connection errors?
+- Use **unpooled connection string** for serverless functions
+- Neon integration provides `NETLIFY_DATABASE_URL_UNPOOLED` automatically
+- If manual setup, get unpooled connection from Neon dashboard
+
+### Local development not working?
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Create .env file
+echo "NETLIFY_DATABASE_URL_UNPOOLED=your_connection_string" > .env
+
+# Run local dev server
+netlify dev
+```
 
 ## Future Enhancements
 - [ ] Add comment moderation
