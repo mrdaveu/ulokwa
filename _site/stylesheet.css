@@ -1,0 +1,258 @@
+html {
+   font-family: "Helvetica Neue", sans-serif;
+   font-size: 24px;
+   background-image: url("photos/noice.jpg");
+   background-repeat: repeat;
+   background-size: 300px;
+   position: relative;
+   z-index: 0;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   height: 100%;
+}
+
+@media screen and (max-width: 414px) {
+   html {
+      font-size: 15px!important;
+   }
+}
+
+body {
+   color: rgb(36,56,0);
+   margin: 0.6em 1em;
+   min-height: 100vh-1.2em;
+}
+
+img {
+   max-height: 98vh;
+   height: auto;
+   width: auto;
+}
+
+.menu {
+   font-family: "IBM Plex Mono";
+   font-weight: 500;
+   display: flex;
+   gap: 2rem;
+   line-height: 1.15;
+}
+
+.column-left {
+   width: 5rem;
+   display: flex;
+   flex-direction: column;
+   min-height: calc(100vh - 1.2em);
+}
+
+.column-left .about {
+   margin-top: auto;
+}
+
+.column-right {
+   width: 30rem;
+   display: flex;
+   flex-direction: column;
+}
+
+.section-title,
+.about,
+.item {
+   display: inline-block;
+   width: fit-content;
+   cursor: pointer;
+   position: relative;
+}
+
+.section-title:hover,
+.section-title.active,
+.about:hover,
+.item:hover,
+.item.selected {
+   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #EED300 0.1em, #EED300 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
+}
+
+.section-title.active {
+   margin-right: 15px;
+}
+
+.section-title.active::after {
+   content: "";
+   position: absolute;
+   right: -15px;
+   top: 50%;
+   transform: translateY(-50%);
+   width: 15px;
+   height: 11px;
+   background-image: url('data:image/svg+xml,<svg width="15" height="11" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.736 10.928L7.248 9.44L9.072 7.64L10.2 6.68L10.176 6.584L8.04 6.728H0.672V4.52H8.04L10.176 4.664L10.2 4.568L9.072 3.608L7.248 1.832L8.736 0.344L14.04 5.648L8.736 10.928Z" fill="%23273800"/></svg>');
+   background-repeat: no-repeat;
+   background-position: center;
+}
+
+.section-items {
+   display: none;
+   flex-direction: column;
+}
+
+.section-items.active {
+   display: flex;
+}
+
+.section-items.item-selected .item {
+   display: none;
+}
+
+.section-items.item-selected .item.selected {
+   display: inline-block !important;
+}
+
+.item.selected {
+   color: #8FCC00;
+}
+
+#articleView {
+   display: none;
+   position: absolute;
+   top: 20vh;
+   margin-left: 7rem;
+   width: 30rem;
+}
+
+p {
+   font-size: 150%;
+}
+
+#articleView.visible {
+   display: block;
+}
+
+.menu.article-open .section-title:not(.active) {
+   display: none;
+}
+
+.menu.article-open .about {
+   display: none;
+}
+
+/* Comment Section Styles */
+.comments-section {
+   margin-top: 3rem;
+   padding-top: 2rem;
+   border-top: 1px solid rgba(36, 56, 0, 0.2);
+}
+
+.empty-message {
+   font-size: 120%;
+   color: rgb(36, 56, 0);
+   margin-bottom: 0.5em;
+}
+
+.empty-subtitle {
+   font-size: 100%;
+   margin-bottom: 1.5em;
+   opacity: 0.7;
+}
+
+.comments-header {
+   font-family: "IBM Plex Mono";
+   font-size: 100%;
+   font-weight: 500;
+   margin-bottom: 1rem;
+}
+
+.comments-list {
+   margin-bottom: 2rem;
+}
+
+.comment {
+   margin-bottom: 1.5rem;
+   padding: 1rem;
+   background: rgba(255, 255, 255, 0.5);
+   border-radius: 4px;
+}
+
+.comment-header {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 0.5rem;
+   font-size: 80%;
+}
+
+.comment-author {
+   font-family: "IBM Plex Mono";
+   font-weight: 500;
+   color: rgb(36, 56, 0);
+}
+
+.comment-date {
+   opacity: 0.6;
+   font-size: 90%;
+}
+
+.comment-body {
+   font-size: 90%;
+   line-height: 1.4;
+   white-space: pre-wrap;
+   word-wrap: break-word;
+}
+
+.no-comments,
+.error {
+   font-size: 90%;
+   opacity: 0.6;
+   font-style: italic;
+   margin-bottom: 1.5rem;
+}
+
+.comment-form {
+   display: flex;
+   flex-direction: column;
+   gap: 0.8rem;
+}
+
+.comment-input,
+.comment-textarea {
+   font-family: "Helvetica Neue", sans-serif;
+   font-size: 90%;
+   padding: 0.6rem;
+   border: 1px solid rgba(36, 56, 0, 0.3);
+   border-radius: 4px;
+   background: rgba(255, 255, 255, 0.8);
+   color: rgb(36, 56, 0);
+}
+
+.comment-input:focus,
+.comment-textarea:focus {
+   outline: none;
+   border-color: #8FCC00;
+   background: rgba(255, 255, 255, 0.95);
+}
+
+.comment-textarea {
+   min-height: 6rem;
+   resize: vertical;
+   line-height: 1.4;
+}
+
+.comment-submit {
+   font-family: "IBM Plex Mono";
+   font-weight: 500;
+   font-size: 90%;
+   padding: 0.6rem 1.2rem;
+   background: rgb(36, 56, 0);
+   color: #EED300;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   width: fit-content;
+   transition: background 0.2s;
+}
+
+.comment-submit:hover:not(:disabled) {
+   background: #8FCC00;
+   color: rgb(36, 56, 0);
+}
+
+.comment-submit:disabled {
+   opacity: 0.6;
+   cursor: not-allowed;
+}
