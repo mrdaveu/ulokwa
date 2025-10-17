@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
    // Cache for prefetched content
    const contentCache = new Map();
+   const commentCache = new Map();
    let hoverTimeout = null;
    let currentPageUrl = null;
 
@@ -94,8 +95,16 @@ document.addEventListener('DOMContentLoaded', function() {
    // Function to load comments from database
    async function loadComments(pageUrl) {
        try {
-           const response = await fetch(`/.netlify/functions/get-comments?url=${encodeURIComponent(pageUrl)}`);
-           const data = await response.json();
+           let data;
+
+           // Use cached comments if available
+           if (commentCache.has(pageUrl)) {
+               data = commentCache.get(pageUrl);
+           } else {
+               const response = await fetch(`/.netlify/functions/get-comments?url=${encodeURIComponent(pageUrl)}`);
+               data = await response.json();
+               commentCache.set(pageUrl, data);
+           }
 
            const commentsList = document.getElementById('commentsList');
            if (data.comments && data.comments.length > 0) {
@@ -241,10 +250,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
            if (url && !contentCache.has(url)) {
                hoverTimeout = setTimeout(() => {
+                   // Prefetch HTML
                    fetch(url)
                        .then(response => response.text())
                        .then(html => {
                            contentCache.set(url, html);
+
+                           // Also prefetch comments if needed
+                           if (!commentCache.has(url)) {
+                               fetch(`/.netlify/functions/get-comments?url=${encodeURIComponent(url)}`)
+                                   .then(r => r.json())
+                                   .then(data => commentCache.set(url, data))
+                                   .catch(() => {});
+                           }
                        })
                        .catch(err => {
                            contentCache.set(url, '<p>Error loading content</p>');
