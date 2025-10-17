@@ -16,23 +16,30 @@ exports.handler = async (event, context) => {
     };
   }
 
-  const NEON_API_KEY = process.env.NEON_API_KEY;
-  const NEON_REST_API_URL = process.env.NEON_REST_API_URL;
+  const DATABASE_URL = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL;
 
-  if (!NEON_API_KEY || !NEON_REST_API_URL) {
-    console.error('Missing NEON_API_KEY or NEON_REST_API_URL environment variables');
+  if (!DATABASE_URL) {
+    console.error('Missing NETLIFY_DATABASE_URL environment variable');
     return {
       statusCode: 500,
       body: JSON.stringify({ error: 'Server configuration error' })
     };
   }
 
+  // Extract connection details from DATABASE_URL
+  const dbUrl = new URL(DATABASE_URL);
+  const [user, password] = dbUrl.username && dbUrl.password
+    ? [dbUrl.username, dbUrl.password]
+    : ['neondb_owner', ''];
+
+  const restApiUrl = `https://${dbUrl.hostname.replace('-pooler', '')}/sql`;
+
   try {
-    const response = await fetch(NEON_REST_API_URL, {
+    const response = await fetch(restApiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${NEON_API_KEY}`
+        'Authorization': `Bearer ${password}`
       },
       body: JSON.stringify({
         query: 'SELECT id, comment, author_name, created_at FROM comments WHERE page_url = $1 ORDER BY created_at DESC',

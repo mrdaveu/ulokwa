@@ -24,17 +24,15 @@
 <p>Connect your repo to Netlify</p>
 </li>
 <li>
-<p><strong>Add Environment Variables</strong> in Netlify Dashboard → Site Settings → Environment Variables:</p>
+<p><strong>Add Environment Variable</strong> in Netlify Dashboard → Site Settings → Environment Variables:</p>
 <p><strong>Required:</strong></p>
 <ul>
-<li><code>NEON_REST_API_URL</code>: Your Neon REST API endpoint
+<li><code>NETLIFY_DATABASE_URL</code>: Your Neon database connection string
 <ul>
-<li>Example: <code>https://ep-frosty-fire-ae0rgj8a.apirest.c-2.us-east-2.aws.neon.tech/neondb/rest/v1</code></li>
-</ul>
-</li>
-<li><code>NEON_API_KEY</code>: Your Neon API key
-<ul>
-<li>Get from Neon Console → Account Settings → API Keys → Create new key</li>
+<li>Get from Neon Console → Connection Details</li>
+<li>Format: <code>postgresql://user:password@host/database?sslmode=require</code></li>
+<li>The functions automatically extract the password and use it with Neon's REST API</li>
+<li><strong>Note:</strong> This should already be set if you used Neon integration</li>
 </ul>
 </li>
 </ul>
@@ -52,8 +50,7 @@
 netlify dev
 </code></pre>
 <p>Add <code>.env</code> file:</p>
-<pre><code>NEON_REST_API_URL=https://your-neon-project.apirest.aws.neon.tech/neondb/rest/v1
-NEON_API_KEY=your_api_key_here
+<pre><code>DATABASE_URL=postgresql://user:password@host.neon.tech/database?sslmode=require
 </code></pre>
 <h3>5. Build and Deploy</h3>
 <pre><code class="language-bash">npm run build
@@ -136,10 +133,10 @@ Content-Type: application/json
 <h3>Comments not loading?</h3>
 <ul>
 <li><strong>Check browser console</strong> for errors</li>
-<li><strong>Verify environment variables</strong> in Netlify:
+<li><strong>Verify environment variable</strong> in Netlify:
 <ul>
-<li><code>NEON_REST_API_URL</code> should be set to your REST API endpoint</li>
-<li><code>NEON_API_KEY</code> should be set to your Neon API key</li>
+<li><code>NETLIFY_DATABASE_URL</code> should be set to your Neon connection string</li>
+<li>Should include username, password, and host</li>
 </ul>
 </li>
 <li><strong>Check Netlify Functions logs</strong>:
@@ -156,13 +153,13 @@ Content-Type: application/json
 <li><strong>Check Netlify Functions logs</strong> for database connection errors</li>
 <li><strong>Verify schema exists</strong>: Run <code>schema.sql</code> in Neon SQL Editor</li>
 </ul>
-<h3>Getting Neon API Key</h3>
+<h3>Getting Database Connection String</h3>
 <ol>
 <li>Go to <a href="https://console.neon.tech">Neon Console</a></li>
-<li>Click your profile → Account Settings</li>
-<li>Go to API Keys section</li>
-<li>Click &quot;Create new API key&quot;</li>
-<li>Copy the key and add to Netlify environment variables</li>
+<li>Select your project</li>
+<li>Click &quot;Connection Details&quot; or &quot;Dashboard&quot;</li>
+<li>Copy the connection string (starts with <code>postgresql://</code>)</li>
+<li>Add to Netlify as <code>NETLIFY_DATABASE_URL</code> environment variable</li>
 </ol>
 <h3>Local development not working?</h3>
 <pre><code class="language-bash"># Install Netlify CLI

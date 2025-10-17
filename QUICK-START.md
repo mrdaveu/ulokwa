@@ -17,26 +17,20 @@
    );
    CREATE INDEX IF NOT EXISTS idx_page_url ON comments(page_url);
    ```
-4. Get your API key:
-   - Profile → Account Settings → API Keys → Create new key
-   - **Save this key!** You'll need it in step 2
 
-### 2️⃣ Configure Netlify (2 minutes)
+### 2️⃣ Configure Netlify (1 minute)
 
 1. Go to Netlify Dashboard → Your Site → Site Settings → Environment Variables
-2. Add these two variables:
+2. Add this variable:
 
-   **NEON_REST_API_URL**
+   **NETLIFY_DATABASE_URL**
    ```
-   https://ep-frosty-fire-ae0rgj8a.apirest.c-2.us-east-2.aws.neon.tech/neondb/rest/v1
-   ```
-
-   **NEON_API_KEY**
-   ```
-   [paste your API key from step 1]
+   postgresql://neondb_owner:npg_3nMZErB1psUv@ep-frosty-fire-ae0rgj8a-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require
    ```
 
 3. Click "Save"
+
+*Note: Using NETLIFY_DATABASE_URL (already set from your Neon integration). The functions will automatically extract the password and use it with Neon's REST API.*
 
 ### 3️⃣ Deploy (1 minute)
 

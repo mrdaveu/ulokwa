@@ -21,13 +21,14 @@ This site now includes a dynamic comment system that allows visitors to contribu
 
 ### 2. Configure Netlify
 1. Connect your repo to Netlify
-2. **Add Environment Variables** in Netlify Dashboard → Site Settings → Environment Variables:
+2. **Add Environment Variable** in Netlify Dashboard → Site Settings → Environment Variables:
 
    **Required:**
-   - `NEON_REST_API_URL`: Your Neon REST API endpoint
-     - Example: `https://ep-frosty-fire-ae0rgj8a.apirest.c-2.us-east-2.aws.neon.tech/neondb/rest/v1`
-   - `NEON_API_KEY`: Your Neon API key
-     - Get from Neon Console → Account Settings → API Keys → Create new key
+   - `NETLIFY_DATABASE_URL`: Your Neon database connection string
+     - Get from Neon Console → Connection Details
+     - Format: `postgresql://user:password@host/database?sslmode=require`
+     - The functions automatically extract the password and use it with Neon's REST API
+     - **Note:** This should already be set if you used Neon integration
 
 3. Deploy site
 
@@ -45,8 +46,7 @@ netlify dev
 
 Add `.env` file:
 ```
-NEON_REST_API_URL=https://your-neon-project.apirest.aws.neon.tech/neondb/rest/v1
-NEON_API_KEY=your_api_key_here
+DATABASE_URL=postgresql://user:password@host.neon.tech/database?sslmode=require
 ```
 
 ### 5. Build and Deploy
@@ -142,9 +142,9 @@ Edit `stylesheet.css` in the "Comment Section Styles" block
 
 ### Comments not loading?
 - **Check browser console** for errors
-- **Verify environment variables** in Netlify:
-  - `NEON_REST_API_URL` should be set to your REST API endpoint
-  - `NEON_API_KEY` should be set to your Neon API key
+- **Verify environment variable** in Netlify:
+  - `NETLIFY_DATABASE_URL` should be set to your Neon connection string
+  - Should include username, password, and host
 - **Check Netlify Functions logs**:
   - Netlify Dashboard → Functions → Click function → View logs
 - **Test function directly**: Visit `https://yoursite.netlify.app/.netlify/functions/get-comments?url=/test.html`
@@ -155,12 +155,12 @@ Edit `stylesheet.css` in the "Comment Section Styles" block
 - **Check Netlify Functions logs** for database connection errors
 - **Verify schema exists**: Run `schema.sql` in Neon SQL Editor
 
-### Getting Neon API Key
+### Getting Database Connection String
 1. Go to [Neon Console](https://console.neon.tech)
-2. Click your profile → Account Settings
-3. Go to API Keys section
-4. Click "Create new API key"
-5. Copy the key and add to Netlify environment variables
+2. Select your project
+3. Click "Connection Details" or "Dashboard"
+4. Copy the connection string (starts with `postgresql://`)
+5. Add to Netlify as `NETLIFY_DATABASE_URL` environment variable
 
 ### Local development not working?
 ```bash
