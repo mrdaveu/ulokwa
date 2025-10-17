@@ -1,5 +1,5 @@
 {
-   "layout": "layout.html",
+   "layout": "question-layout.html",
    "tags": "questions",
    "permalink": "/questions/{{ title | slug }}.html"
 }

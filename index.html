@@ -77,59 +77,33 @@ document.addEventListener('DOMContentLoaded', function() {
    let hoverTimeout = null;
    let currentPageUrl = null;
 
-   // Function to check if content is empty
-   function isContentEmpty(html) {
-       const tempDiv = document.createElement('div');
-       tempDiv.innerHTML = html;
-       const articleBody = tempDiv.querySelector('.article-body');
-       if (!articleBody) return true;
-       const text = articleBody.textContent.trim();
-       return text.length < 10; // Consider empty if less than 10 chars
-   }
-
-   // Function to display content and handle empty state
+   // Function to display content
    async function displayContent(url, html) {
        currentPageUrl = url;
-       const isEmpty = isContentEmpty(html);
 
-       if (isEmpty) {
-           // Show empty state with comment form
-           articleContent.innerHTML = `
-               <div class="article-body">
-                   <p class="empty-message">The answer is not yet known to this part of the internet.</p>
-                   <p class="empty-subtitle">Any clues? Add a comment:</p>
-               </div>
-               <div class="comments-section" id="commentsSection">
-                   <div class="comments-list" id="commentsList"></div>
-                   <form class="comment-form" id="commentForm">
-                       <input type="text" id="authorName" placeholder="Your name (optional)" class="comment-input">
-                       <textarea id="commentText" placeholder="Share your thoughts..." class="comment-textarea" required></textarea>
-                       <button type="submit" class="comment-submit">Submit</button>
-                   </form>
-               </div>
-           `;
-       } else {
-           // Show normal content with comments below
+       // Only add comments section for questions
+       if (url.includes('/questions/')) {
            articleContent.innerHTML = html + `
                <div class="comments-section" id="commentsSection">
                    <div class="comments-list" id="commentsList"></div>
                    <form class="comment-form" id="commentForm">
-                       <input type="text" id="authorName" placeholder="Your name (optional)" class="comment-input">
-                       <textarea id="commentText" placeholder="Share your thoughts..." class="comment-textarea" required></textarea>
+                       <input type="text" id="authorName" placeholder="anonymous" class="comment-input">
+                       <textarea id="commentText" placeholder="i think its obviously cuz..." class="comment-textarea" required></textarea>
                        <button type="submit" class="comment-submit">Add comment</button>
                    </form>
                </div>
            `;
+
+           articleView.classList.add('visible');
+           await loadComments(url);
+
+           const form = document.getElementById('commentForm');
+           form.addEventListener('submit', handleCommentSubmit);
+       } else {
+           // No comments for other sections
+           articleContent.innerHTML = html;
+           articleView.classList.add('visible');
        }
-
-       articleView.classList.add('visible');
-
-       // Load existing comments
-       await loadComments(url);
-
-       // Setup comment form submission
-       const form = document.getElementById('commentForm');
-       form.addEventListener('submit', handleCommentSubmit);
    }
 
    // Function to load comments from database
@@ -150,12 +124,9 @@ document.addEventListener('DOMContentLoaded', function() {
                            <div class="comment-body">${escapeHtml(comment.comment)}</div>
                        </div>
                    `).join('');
-           } else {
-               commentsList.innerHTML = '<p class="no-comments">No comments yet. Be the first!</p>';
            }
        } catch (error) {
            console.error('Error loading comments:', error);
-           document.getElementById('commentsList').innerHTML = '<p class="error">Failed to load comments</p>';
        }
    }
 

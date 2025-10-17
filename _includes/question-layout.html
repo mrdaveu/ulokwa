@@ -2,9 +2,11 @@
 <html>
 <body>
     <div class="article-body">
-        
+        {% if content | hasContent %}
+            {{ content }}
+        {% else %}
             <p class="empty-message">The answer is not yet known to this part of the internet.</p>
-        
+        {% endif %}
     </div>
 </body>
 </html>

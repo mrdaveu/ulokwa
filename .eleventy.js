@@ -8,4 +8,10 @@ module.exports = function(eleventyConfig) {
    eleventyConfig.setLibrary("md", md);
    eleventyConfig.addPassthroughCopy("stylesheet.css");
    eleventyConfig.addPassthroughCopy("photos");
+
+   // Check if content has actual text (not just HTML tags/whitespace)
+   eleventyConfig.addFilter("hasContent", (str) => {
+     const text = str.replace(/<[^>]*>/g, '').trim();
+     return text.length > 0;
+   });
 };
