@@ -162,11 +162,31 @@ img {
 }
 
 p {
-   font-size: 135%;
+   font-size: 1.35rem;
+}
+
+iframe {
+   max-width: 100%;
+   height: auto;
+}
+
+h6 {
+   font-size: 1rem;
+   font-weight: 400;
+   margin: 1em 0em;
+}
+
+blockquote p {
+   font-size: inherit!important;
+   font-style: italic;
 }
 
 #articleView.visible {
    display: block;
+}
+
+.article-body {
+   padding-bottom: 4rem;
 }
 
 .menu.article-open .section-title:not(.active) {
