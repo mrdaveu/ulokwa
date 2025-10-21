@@ -78,8 +78,13 @@ img {
    white-space: nowrap;
 }
 
-.about.active {
-   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #EED300 0.1em, #EED300 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
+.about.active,
+.section-title:hover,
+.section-title.active,
+.about:hover,
+.item:hover,
+.item.selected {
+   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #FFDD00 0.1em, #FFDD00 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
 }
 
 .about.active::after {
@@ -99,14 +104,6 @@ img {
    width: fit-content;
    cursor: pointer;
    position: relative;
-}
-
-.section-title:hover,
-.section-title.active,
-.about:hover,
-.item:hover,
-.item.selected {
-   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #EED300 0.1em, #EED300 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
 }
 
 .section-title.active {
