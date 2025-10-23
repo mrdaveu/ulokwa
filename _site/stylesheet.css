@@ -24,6 +24,9 @@ html {
       margin: 0 1em!important;
       width: auto!important;
       overflow-x: hidden;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
    }
 
    .section-title.active {
@@ -78,8 +81,13 @@ img {
    white-space: nowrap;
 }
 
-.about.active {
-   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #EED300 0.1em, #EED300 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
+.about.active,
+.section-title:hover,
+.section-title.active,
+.about:hover,
+.item:hover,
+.item.selected {
+   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #FFDD00 0.1em, #FFDD00 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
 }
 
 .about.active::after {
@@ -99,14 +107,6 @@ img {
    width: fit-content;
    cursor: pointer;
    position: relative;
-}
-
-.section-title:hover,
-.section-title.active,
-.about:hover,
-.item:hover,
-.item.selected {
-   background: linear-gradient(to bottom, transparent 0, transparent 0.1em, #EED300 0.1em, #EED300 calc(100% - 0.1em), transparent calc(100% - 0.1em), transparent 100%);
 }
 
 .section-title.active {
@@ -156,9 +156,6 @@ img {
    width: min(30rem, calc(100vw - 7rem - 2em));
    overflow-wrap: break-word;
    word-wrap: break-word;
-   hyphens: auto;
-   -webkit-hyphens: auto;
-   -ms-hyphens: auto;
 }
 
 p {
